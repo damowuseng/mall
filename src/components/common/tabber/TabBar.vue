@@ -14,7 +14,7 @@
 <style scoped>
   #tab-bar {
     display: flex;
-    background: #f6f6;
+    background: #ffffff;
     position: fixed;
     left: 0;
     right: 0;
