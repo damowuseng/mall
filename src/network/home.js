@@ -5,3 +5,14 @@ export function getHomeData() {
     url: '/home/api'
   })
 }
+
+export function getHomeGoods(type, page) {
+  return request({
+    url: '',
+    params: {
+      type,
+      page
+    }
+  })
+
+}

@@ -27,7 +27,7 @@
 	import FeatureView from "./childcomponents/FeatureView";
 	import TabControl from "../../components/content/tabcontrol/TabControl";
 	// 导入数据请求模块
-	import { getHomeData } from "../../network/home";
+	import { getHomeData, getHomeGoods } from "../../network/home";
 
 
 	export default {
@@ -41,21 +41,45 @@
 		},
 		data() {
 			return {
-				result: null
-			// 也可以进行数据分类
+				result: null,
+			// 真实数据按以下进行数据分类
 			// 	banners = [],
 			// 	imgs = []
 			// 	recommends = []
+				goods: {
+					'pop': {page:0, list: []},
+					'new': {page:0, list: []},
+					'sell': {page:0, list: []}
+				}
 			}
 		},
 		created() {
-			getHomeData().then(res => {
+			// 请求轮播图推荐数据
+			this.getTopData()
+
+			// 请求商品数据
+			this.getGoods('pop')
+			this.getGoods('new')
+			this.getGoods('sell')
+		},
+		methods: {
+			getTopData() {
+				getHomeData().then(res => {
 				this.result = res
 				// // 也可以进行数据分类
 				// this.banners = res.data.banner
 				// this.imgs = res.data.img
 				// this.recommends = res.data.recommends
 			}).catch()
+			},
+			getGoods(type) {
+				const page = this.goods[type].page + 1
+				getHomeGoods(type, page).then(res => {
+				this.goods[type].list.push(...res.data.list)
+					this.goods[type].page += 1
+			}).catch()
+			}
+
 		}
 	}
 </script>
