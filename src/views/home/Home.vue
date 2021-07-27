@@ -3,20 +3,13 @@
 		<nav-bar class="home-nav"><div slot="center">购物街</div></nav-bar>
 		<home-swiper/>
 		<recommend/>
-		<feature-view></feature-view>
-		<tab-control :titles="['流行', '新款', '精选']"></tab-control>
+		<feature-view/>
+		<tab-control :titles="['流行', '新款', '精选']" @tabClick="tabClick"></tab-control>
+		<goods-list :goods="showGoods"/>
+
 <!--		有真实数据时候用以下代码-->
 <!--		<home-swiper :banners="banners"/>-->
 <!--		<recommend :recommends="recommends"></recommend>-->
-		<div>11111</div>
-		<div>11111</div>
-		<div>11111</div>
-		<div>11111</div>
-		<div>11111</div>
-		<div>11111</div>
-		<div>11111</div>
-		<div>11111</div>
-		<div>11111</div>
 	</div>
 </template>
 
@@ -26,6 +19,8 @@
 	import Recommend from "./childcomponents/Recommend";
 	import FeatureView from "./childcomponents/FeatureView";
 	import TabControl from "../../components/content/tabcontrol/TabControl";
+	import GoodsList from "../../components/content/goods/GoodsList";
+
 	// 导入数据请求模块
 	import { getHomeData, getHomeGoods } from "../../network/home";
 
@@ -37,7 +32,8 @@
 			HomeSwiper,
 			Recommend,
 			FeatureView,
-			TabControl
+			TabControl,
+			GoodsList
 		},
 		data() {
 			return {
@@ -50,7 +46,13 @@
 					'pop': {page:0, list: []},
 					'new': {page:0, list: []},
 					'sell': {page:0, list: []}
-				}
+				},
+				currentType: 'pop'
+			}
+		},
+		computed: {
+			showGoods() {
+				return  this.goods[this.currentType]
 			}
 		},
 		created() {
@@ -63,6 +65,7 @@
 			this.getGoods('sell')
 		},
 		methods: {
+			// 网络请求相关
 			getTopData() {
 				getHomeData().then(res => {
 				this.result = res
@@ -70,16 +73,32 @@
 				// this.banners = res.data.banner
 				// this.imgs = res.data.img
 				// this.recommends = res.data.recommends
-			}).catch()
+			})
 			},
 			getGoods(type) {
 				const page = this.goods[type].page + 1
 				getHomeGoods(type, page).then(res => {
 				this.goods[type].list.push(...res.data.list)
 					this.goods[type].page += 1
-			}).catch()
-			}
+			})
+			},
 
+			// 事件监听方法
+			tabClick(index) {
+				switch (index) {
+					case 0:
+						this.currentType = 'pop'
+						break
+					case 1:
+						this.currentType = 'new'
+						break
+					case 2:
+						this.currentType = 'sell'
+						break
+				}
+				console.log(index);
+				console.log(this.currentType);
+			}
 		}
 	}
 </script>
