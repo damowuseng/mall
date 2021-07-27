@@ -35,7 +35,7 @@
 <style scoped>
 	.sw {
 		width: 100%;
-		height: 180px;
+		height: 170px;
 		background-color: #666666;
 		color: white;
 	}
