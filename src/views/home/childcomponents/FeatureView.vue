@@ -1,6 +1,6 @@
 <template>
   <div class="feature">
-    <a href="">
+    <a href="#">
       <img src="../../../assets/img/home/feature.jpg" alt="">
     </a>
   </div>

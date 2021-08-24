@@ -5,18 +5,14 @@
 		<scroll class="content" ref="scroll"
 						:probe-type="3" @scroll="contentScroll"
 						:pull-up-load="true" @pullingUp="loadMore">
-			<home-swiper/>
-			<recommend/>
+			<home-swiper :banners="banners"/>
+			<recommend :recommends="recommends"></recommend>
 			<feature-view/>
 			<tab-control :titles="['流行', '新款', '精选']" @tabClick="tabClick" class="tab-control"></tab-control>
 			<goods-list :goods="showGoods"/>
 		</scroll>
-<!--		监听组件原生事件时，必须给对应事件加上.native修饰符-->
+		<!--		监听组件原生事件时，必须给对应事件加上.native修饰符-->
 		<back-top @click.native="backClick" v-show="isShowTop"></back-top>
-		
-<!--		有真实数据时候用以下代码-->
-<!--		<home-swiper :banners="banners"/>-->
-<!--		<recommend :recommends="recommends"></recommend>-->
 	</div>
 </template>
 
@@ -49,10 +45,8 @@
 		data() {
 			return {
 				result: null,
-			// 真实数据按以下进行数据分类
-			// 	banners = [],
-			// 	imgs = []
-			// 	recommends = []
+				banners: [],
+				recommends: [],
 				goods: {
 					'pop': {page:0, list: []},
 					'new': {page:0, list: []},
@@ -80,14 +74,15 @@
 			// 网络请求相关
 			getTopData() {
 				getHomeData().then(res => {
-				this.result = res
+				// this.result = res
 					/**
 					 * 也可以进行数据分类
 					 * 有数据用一下代码
 					 */
-				// this.banners = res.data.banner
+					// console.log(res)
+				this.banners = res.data.banners
 				// this.imgs = res.data.img
-				// this.recommends = res.data.recommends
+				this.recommends = res.data.recommends
 			})
 			},
 			getGoods(type) {

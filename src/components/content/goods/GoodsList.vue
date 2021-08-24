@@ -20,9 +20,11 @@
       GoodsListItem
     },
     props: {
-      type: Array,
-      default() {
-        return []
+      goods: {
+        type: Array,
+        default() {
+          return []
+        }
       }
     }
   }

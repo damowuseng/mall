@@ -3,6 +3,7 @@ import VueRouter from "vue-router";
 // 路由懒加载
 const Home = () => import('../views/home/Home')
 const  Profile = () => import('../views/profile/Profile')
+const Detail = () => import('../views/detail/Detail')
 
 Vue.use(VueRouter)
 
@@ -33,13 +34,18 @@ const routes = [
 		path: '/profile',
 		name: 'profile',
 		component: Profile
+	},
+	{
+		path: '/detail/:id',
+		name: 'detail',
+		component: Detail
 	}
 ]
 
 
 const router = new VueRouter({
 	routes,
-	model: 'history'
+	mode: 'history'
 })
 
 export default router
