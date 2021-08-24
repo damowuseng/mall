@@ -1,15 +1,10 @@
 <template>
   <div class="goods">
 <!--    有数据时候用-->
-<!--    <goods-list-item v-for="item in goods" :key="item.id" :goods-item="item"/>-->
-
-<!--    调试占位用-->
-  <goods-list-item></goods-list-item>
-
+    <goods-list-item v-for="item in goods"
+                     :key="item.id"
+                     :goods-item="item"/>
   </div>
-
-
-
 </template>
 
 <script>
@@ -31,5 +26,9 @@
 </script>
 
 <style scoped>
-
+  .goods {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content:space-around;
+  }
 </style>

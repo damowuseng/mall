@@ -5,14 +5,18 @@
 		<scroll class="content" ref="scroll"
 						:probe-type="3" @scroll="contentScroll"
 						:pull-up-load="true" @pullingUp="loadMore">
+			
 			<home-swiper :banners="banners"/>
 			<recommend :recommends="recommends"></recommend>
 			<feature-view/>
-			<tab-control :titles="['流行', '新款', '精选']" @tabClick="tabClick" class="tab-control"></tab-control>
+			<tab-control :titles="['流行', '新款', '精选']" @tabClick="tabClick" class="tab-control">
+			</tab-control>
 			<goods-list :goods="showGoods"/>
+			
 		</scroll>
+		
 		<!--		监听组件原生事件时，必须给对应事件加上.native修饰符-->
-		<back-top @click.native="backClick" v-show="isShowTop"></back-top>
+		<back-top @click.native="backClick" v-show="isShowTop"/>
 	</div>
 </template>
 
@@ -28,6 +32,7 @@
 
 	// 导入数据请求模块
 	import { getHomeData, getHomeGoods } from "../../network/home";
+	import { debounce } from "../../utils/debounce"
 	
 	
 	export default {
@@ -58,17 +63,25 @@
 		},
 		computed: {
 			showGoods() {
-				return  this.goods[this.currentType]
+				// console.log(this.goods[this.currentType])
+				return  this.goods['pop'].list
 			}
 		},
 		created() {
 			// 请求轮播图推荐数据
 			this.getTopData()
-
 			// 请求商品数据
 			this.getGoods('pop')
 			this.getGoods('new')
 			this.getGoods('sell')
+		},
+		mounted() {
+			// 防抖操作 对refresh刷新频繁问题，进行防抖操作
+			const refresh = debounce(this.$refs.scroll.refresh, 300)
+			// 监听图片加载完成后刷新解决上拉加载bug
+			this.$bus.$on('imageLoadFished', () => {
+				refresh()
+			})
 		},
 		methods: {
 			// 网络请求相关
@@ -88,7 +101,9 @@
 			getGoods(type) {
 				const page = this.goods[type].page + 1
 				getHomeGoods(type, page).then(res => {
-					this.goods[type].list.push(...res.data.list)
+					// console.log(res.data)
+					// 此处可以根据后端数据接口调整
+					this.goods[type].list.push(...res.data.pop)
 					this.goods[type].page += 1
 					
 					this.$refs.scroll.finishPullUp()

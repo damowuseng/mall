@@ -11,10 +11,12 @@
   export default {
     name: "Scroll",
     props: {
+      //监听滚动位置参数
       probeType: {
         type: Number,
         default: 0,
       },
+      // 上拉加载更多
       pullUpLoad: {
         type: Boolean,
         default: false
@@ -44,11 +46,14 @@
       })
     },
     methods: {
-      scrollTop(x, y, time=500) {
-        this.scroll.scrollTo(x, y, time)
+      scrollTop(x, y, time=300) {
+        this.scroll && this.scroll.scrollTo(x, y, time)
       },
       finishPullUp() {
         this.scroll.finishPullUp()
+      },
+      refresh() {
+        this.scroll && this.scroll.refresh() && this.scroll.refresh()
       }
     }
   }

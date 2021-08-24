@@ -8,7 +8,7 @@ export function getHomeData() {
 
 export function getHomeGoods(type, page) {
   return request({
-    url: '',
+    url: 'api/home/goods',
     params: {
       type,
       page
