@@ -2,7 +2,7 @@
   <swiper>
 			<swiper-item v-for="item in banners" v-bind:key="item.id">
 				<a :href="item.banner">
-					<img :src="item.banner" alt="">
+					<img :src="item.banner" alt="" @load="imageLoadFished">
 				</a>
 			</swiper-item>
 
@@ -25,10 +25,25 @@
         }
       }
     },
-    components: {
+		data() {
+      return {
+        isLoad: false
+			}
+		},
+		components: {
       Swiper,
 			SwiperItem
-    }
+    },
+		methods: {
+			imageLoadFished () {
+				// 通过if判断，只需发出一次事件即可
+				if(!this.isLoad) {
+					this.$emit('bannerImageLoadFished')
+					this.isLoad = true
+				}
+				
+			}
+		}
   }
 </script>
 

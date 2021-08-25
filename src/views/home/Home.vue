@@ -1,16 +1,22 @@
 <template>
 	<div id="home">
 		<nav-bar class="home-nav"><div slot="center">购物街</div></nav-bar>
+		<tab-control :titles="['流行', '新款', '精选']"
+									@tabClick="tabClick"
+									ref="tabControlIsShow"
+									class="tabIsShow"
+									v-show="isFixed"/>
 		
 		<scroll class="content" ref="scroll"
 						:probe-type="3" @scroll="contentScroll"
 						:pull-up-load="true" @pullingUp="loadMore">
 			
-			<home-swiper :banners="banners"/>
-			<recommend :recommends="recommends"></recommend>
+			<home-swiper :banners="banners" @bannerImageLoadFished="bannerImageLoadFished"/>
+			<recommend :recommends="recommends"/>
 			<feature-view/>
-			<tab-control :titles="['流行', '新款', '精选']" @tabClick="tabClick" class="tab-control">
-			</tab-control>
+			<tab-control :titles="['流行', '新款', '精选']"
+										@tabClick="tabClick"
+										ref="tabControl"/>
 			<goods-list :goods="showGoods"/>
 			
 		</scroll>
@@ -58,7 +64,9 @@
 					'sell': {page:0, list: []}
 				},
 				currentType: 'pop',
-				isShowTop: false
+				isShowTop: false,
+				tabOffsetTop: 0,
+				isFixed: false
 			}
 		},
 		computed: {
@@ -105,7 +113,7 @@
 					// 此处可以根据后端数据接口调整
 					this.goods[type].list.push(...res.data.pop)
 					this.goods[type].page += 1
-					
+					// 完成上拉加载更多
 					this.$refs.scroll.finishPullUp()
 					
 			})
@@ -124,23 +132,32 @@
 						this.currentType = 'sell'
 						break
 				}
-				console.log(index);
-				console.log(this.currentType);
+				// 同步吸顶tabcontrol点击
+				this.$refs.tabControlIsShow.currentIndex = index
+				this.$refs.tabControl.currentIndex = index
+				// console.log(index);
+				// console.log(this.currentType);
 			},
 			backClick() {
 				this.$refs.scroll.scrollTop(0,0)
 			},
 			
-			// 监听鼠标坐标根据y值决定是否现实backtop图标
+			
 			contentScroll(position) {
+				// 监听鼠标坐标根据y值决定是否现实backtop图标
 				this.isShowTop = (-position.y) > 200
-				// console.log(position);
+				// 判断tab-control是否吸顶
+				this.isFixed = (-position.y) > this.tabOffsetTop
 			},
-			// 监听上拉加载事件
+			// 上拉加载更多
 			loadMore() {
 				this.getGoods(this.currentType)
 				console.log(111);
 			},
+			bannerImageLoadFished () {
+				// 获取tab-control的offsetTop
+				this.tabOffsetTop = this.$refs.tabControl.$el.offsetTop
+			}
 		}
 	}
 </script>
@@ -153,18 +170,12 @@
 	}
 	.home-nav {
 		background-color: var(--color-tint);
-		color: white;
+		color: #fff;
 		position: fixed;
 		left: 0;
 		right: 0;
 		top: 0;
-		z-index: 999;
-
-	}
-	.tab-control {
-		position: sticky;
-		top: 44px;
-		z-index: 9;
+		z-index: 1;
 	}
 	.content {
 		position: absolute;
@@ -173,5 +184,9 @@
 		right: 0;
 		left: 0;
 		overflow: hidden;
+	}
+	.tabIsShow {
+		position: relative;
+		z-index: 9;
 	}
 </style>

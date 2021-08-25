@@ -35,15 +35,21 @@
       })
       
       // 监听滚动的位置
-      this.scroll.on('scroll', position => {
-        // console.log(position);
-        this.$emit('scroll', position)
-      })
+      if (this.probeType == 2 || this.probeType == 3) {
+        this.scroll.on('scroll', position => {
+          // console.log(position);
+          this.$emit('scroll', position)
+        })
+      }
+      
       //上拉加载更多
-      this.scroll.on('pullingUp', () => {
-        this.$emit('pullingUp')
-        // console.log('g更多');
-      })
+      if (this.pullUpLoad) {
+        this.scroll.on('pullingUp', () => {
+          this.$emit('pullingUp')
+          // console.log('g更多');
+        })
+      }
+      
     },
     methods: {
       scrollTop(x, y, time=300) {
@@ -53,7 +59,7 @@
         this.scroll.finishPullUp()
       },
       refresh() {
-        this.scroll && this.scroll.refresh() && this.scroll.refresh()
+        this.scroll && this.scroll.refresh()
       }
     }
   }
