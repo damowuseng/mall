@@ -66,7 +66,8 @@
 				currentType: 'pop',
 				isShowTop: false,
 				tabOffsetTop: 0,
-				isFixed: false
+				isFixed: false,
+				saveY: 0
 			}
 		},
 		computed: {
@@ -158,6 +159,17 @@
 				// 获取tab-control的offsetTop
 				this.tabOffsetTop = this.$refs.tabControl.$el.offsetTop
 			}
+		},
+		activated() {
+			// 让home种的内容保持原来的位置
+			this.$refs.scroll.scrollToTop(0, this.saveY, 0)
+			this.$refs.scroll.refresh()
+			
+		},
+		deactivated() {
+			// 让home种的内容保持原来的位置
+			this.saveY = this.$refs.scroll.getScrollY()
+			console.log(this.saveY)
 		}
 	}
 </script>

@@ -52,7 +52,7 @@
       
     },
     methods: {
-      scrollTop(x, y, time=300) {
+      scrollToTop(x, y, time=300) {
         this.scroll && this.scroll.scrollTo(x, y, time)
       },
       finishPullUp() {
@@ -60,6 +60,9 @@
       },
       refresh() {
         this.scroll && this.scroll.refresh()
+      },
+      getScrollY() {
+        return this.scroll ? this.scroll.y : 0
       }
     }
   }
