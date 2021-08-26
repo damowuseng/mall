@@ -24,8 +24,9 @@
 				<p>推荐信息</p>
 				<p>推荐信息</p></div>
 		</scroll>
+		
+		<detail-bottom-bar @addCart="addToCart"/>
 		<back-top @click.native="backClick" v-show="isShowTop"/>
-		<detail-bottom-bar/>
 	</div>
 </template>
 
@@ -138,8 +139,12 @@
 				}
 				// 回到顶部判断
 				this.isShowTop = (-position.y) > 200
+			},
+			// 监听加入购物车按钮
+			addToCart() {
+				this.$store.commit('addCart', '商品1')
+				// console.log('addCart')
 			}
-			
 		}
 	}
 </script>
