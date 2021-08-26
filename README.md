@@ -1,5 +1,7 @@
 # mall
 
+## 数据用的是https://github.com/wll8/mockm
+
 ## Project setup
 ```
 npm install
