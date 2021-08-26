@@ -34,8 +34,9 @@
 	import TabControl from "../../components/content/tabcontrol/TabControl";
 	import GoodsList from "../../components/content/goods/GoodsList";
 	import Scroll from "../../components/common/scroll/Scroll";
-	import BackTop from "../../components/common/backTop/BackTop";
-
+	// mixin
+	import {backTopMixin} from "../../mixin/mixin";
+	
 	// 导入数据请求模块
 	import { getHomeData, getHomeGoods } from "../../network/home";
 	import { debounce } from "../../utils/debounce"
@@ -51,8 +52,8 @@
 			TabControl,
 			GoodsList,
 			Scroll,
-			BackTop
 		},
+		mixins: [backTopMixin],
 		data() {
 			return {
 				result: null,
@@ -64,7 +65,6 @@
 					'sell': {page:0, list: []}
 				},
 				currentType: 'pop',
-				isShowTop: false,
 				tabOffsetTop: 0,
 				isFixed: false,
 				saveY: 0
@@ -139,9 +139,7 @@
 				// console.log(index);
 				// console.log(this.currentType);
 			},
-			backClick() {
-				this.$refs.scroll.scrollTop(0,0)
-			},
+			
 			
 			
 			contentScroll(position) {
@@ -164,12 +162,11 @@
 			// 让home种的内容保持原来的位置
 			this.$refs.scroll.scrollToTop(0, this.saveY, 0)
 			this.$refs.scroll.refresh()
-			
 		},
 		deactivated() {
 			// 让home种的内容保持原来的位置
 			this.saveY = this.$refs.scroll.getScrollY()
-			console.log(this.saveY)
+			// console.log(this.saveY)
 		}
 	}
 </script>
